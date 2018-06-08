@@ -47,6 +47,7 @@
     _firstImgV.image = [UIImage imageNamed:@"huahuagongzhu12.jpg"];
     [_scrollView addSubview:_firstImgV];
     
+    //缩小的视图
     _miniView = [[UIView alloc] initWithFrame:CGRectMake(0, 300, _scrollView.frame.size.width / ratio, _scrollView.frame.size.height / ratio)];
     _miniView.backgroundColor = [UIColor redColor];
     _miniView.clipsToBounds = YES;
@@ -54,6 +55,8 @@
     _miniImg = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, _miniView.frame.size.width, _miniView.frame.size.height)];
     _miniImg.image = [UIImage imageNamed:@"huahuagongzhu12.jpg"];
     [_miniView addSubview:_miniImg];
+//    UIButton *miniViewButton = [[]]
+    //局部指示图
     _miniIndicator = [[UIView alloc]initWithFrame:CGRectMake(
                                                               self.scrollView.contentOffset.x/ratio/self.scrollView.zoomScale,
                                                               self.scrollView.contentOffset.y/ratio/self.scrollView.zoomScale,
