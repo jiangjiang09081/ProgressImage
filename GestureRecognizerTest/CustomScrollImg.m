@@ -98,7 +98,40 @@
     _silder.minimumTrackTintColor = [UIColor redColor];
     [_silder addTarget:self action:@selector(silderValueChanged:) forControlEvents:UIControlEventValueChanged];
     [self addSubview:_silder];
+    UIButton *miniViewButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, _miniView.frame.size.width, _miniView.frame.size.height)];
+    [miniViewButton addTarget:self action:@selector(dragBegan:withEvent:) forControlEvents:UIControlEventTouchDragInside | UIControlEventTouchDown];
+    miniViewButton.clipsToBounds = YES;
+    [_miniView addSubview:miniViewButton];
 }
+
+//局部指示图坐标
+- (void)dragBegan:(UIButton *)c withEvent:(UIEvent *)ev{
+    UITouch *touch = [[ev allTouches] anyObject];
+    CGPoint touchPoint = [touch locationInView:_miniView];
+    if(touchPoint.x<0)
+    {
+        touchPoint.x=0;
+    }
+    if(touchPoint.y<0)
+    {
+        touchPoint.y=0;
+    }
+    if(touchPoint.y + _miniView.frame.size.height/self.scrollView.zoomScale > _miniView.frame.size.height)
+    {
+        touchPoint.y = _miniView.frame.size.height - _miniView.frame.size.height/self.scrollView.zoomScale;
+    }
+    
+    if(touchPoint.x + _miniView.frame.size.width/self.scrollView.zoomScale > _miniView.frame.size.width)
+    {
+        touchPoint.x = _miniView.frame.size.width - _miniView.frame.size.width/self.scrollView.zoomScale;
+    }
+    
+    _miniIndicator.frame = CGRectMake(touchPoint.x, touchPoint.y, _miniView.frame.size.width/self.scrollView.zoomScale, _miniView.frame.size.height/self.scrollView.zoomScale);
+    
+    [self.scrollView setContentOffset:CGPointMake(touchPoint.x*ratio*self.scrollView.zoomScale, touchPoint.y*ratio*self.scrollView.zoomScale) animated:NO];
+    _sccondScrollview.contentOffset = _scrollView.contentOffset;
+}
+
 
 //滑动条滑动
 - (void)silderValueChanged:(UISlider *)silder{
